@@ -1,0 +1,99 @@
+---
+title: "Troubleshoot Common Samudra Dashboard Issues"
+sidebarTitle: "Troubleshooting"
+description: "Diagnose and resolve the most common issues in Samudra, including connection failures, control errors, missing metrics, and alert misfires."
+---
+
+Use the sections below to identify and resolve the most common problems encountered in the Samudra dashboard. Each item describes the likely cause and the steps needed to get back on track.
+
+<AccordionGroup>
+
+<Accordion title="Pump shows 'Offline' / connection indicator is red">
+A red connection indicator means Samudra cannot communicate with the pump controller at its registered address.
+
+**Steps to resolve:**
+
+1. **Check your network.** Confirm that the device running Samudra has an active internet connection and that your site network is reachable.
+2. **Verify the pump's IP address.** Navigate to **Settings → Pumps**, select the affected pump, and confirm the IP address and port match those configured on the physical controller.
+3. **Test the connection directly.** From the same settings page, click **Test Connection**. If the test fails, the controller may be powered off, behind a firewall, or on a different subnet.
+4. **Check for firewall rules.** Ensure that the controller's port is open for inbound and outbound traffic from Samudra's servers.
+5. **Restart the controller.** If all network settings are correct, power-cycle the pump controller and wait 30 seconds for it to re-register.
+
+If the indicator remains red after these steps, consult your network administrator or contact Samudra support.
+</Accordion>
+
+<Accordion title="ON/OFF switch does nothing when tapped">
+If tapping the ON/OFF toggle produces no response or an immediate revert, one of the following conditions is likely preventing the command from being sent.
+
+**Steps to resolve:**
+
+1. **Check your role.** Users assigned the **Viewer** role cannot send control commands. Only **Operator** and **Admin** roles can toggle pumps. Contact your organization admin to update your role if needed.
+2. **Check the connection state.** The pump must show a green (Online) indicator before control commands are accepted. Resolve any offline status first.
+3. **Wait for a pending command.** If another command is already in progress, the toggle is temporarily locked until the previous command is acknowledged. Wait a few seconds and try again.
+4. **Refresh the dashboard.** In rare cases a stale UI state can block interactions. Press **Ctrl+Shift+R** (or **Cmd+Shift+R** on macOS) to perform a hard refresh.
+</Accordion>
+
+<Accordion title="Metrics show '--' (dashes) instead of values">
+Dashes in metric fields indicate that Samudra is not receiving valid data from the pump's sensors.
+
+**Steps to resolve:**
+
+1. **Check for a sensor fault.** Inspect the pump controller's local display or indicator lights for any sensor error codes.
+2. **Review the poll interval.** Go to **Settings → Pumps → [Pump Name] → Polling** and confirm the interval is set to a supported value (minimum 5 seconds). An interval of **0** disables polling entirely.
+3. **Reconnect the pump.** Click **Disconnect**, wait 10 seconds, then click **Reconnect** on the pump detail page to re-establish the data stream.
+4. **Check sensor wiring.** If the issue persists, a physical sensor or cable fault at the site may be preventing readings from reaching the controller.
+</Accordion>
+
+<Accordion title="Emergency Stop was triggered accidentally">
+An Emergency Stop (E-Stop) cannot be undone with a single click — this is intentional. The pump will remain halted until an operator manually resumes operation after confirming safe conditions.
+
+**To resume operation after an accidental E-Stop:**
+
+1. **Physically inspect the pump and surrounding area.** Confirm that no personnel, equipment, or hazardous conditions are present before restarting.
+2. **Verify system pressure and flow** are within safe operating ranges.
+3. **Navigate to the pump detail page** in the Samudra dashboard.
+4. **Use the ON/OFF switch** to restart the pump in the normal way — the E-Stop state is cleared automatically once you issue a new ON command.
+5. **Log the incident.** Even if accidental, document the event in your site's operational log.
+
+<Warning>Never restart a pump after an Emergency Stop without first physically verifying safe conditions at the site.</Warning>
+</Accordion>
+
+<Accordion title="Not receiving email alerts">
+If expected alert emails are not arriving, work through the following checks:
+
+1. **Check your spam or junk folder.** Alert emails come from `alerts@samudra.io` — add this address to your allowlist to prevent filtering.
+2. **Verify your email address.** Go to **Settings → Account** and confirm the address on file is correct and verified.
+3. **Confirm alert thresholds are configured.** Navigate to **Settings → Alerts** and ensure at least one threshold rule is active for the pump in question. Rules that are paused or have no defined threshold will not fire.
+4. **Check notification channels.** Make sure the **Email** channel is enabled for the relevant alert rule — it is possible only webhook or in-app notifications are turned on.
+</Accordion>
+
+<Accordion title="Webhook not firing">
+Webhooks that fail silently are usually caused by network reachability issues or a misconfigured secret.
+
+**Steps to resolve:**
+
+1. **Verify the endpoint URL is publicly reachable.** Samudra's servers must be able to reach your webhook URL from the open internet. URLs pointing to `localhost`, internal IP addresses, or VPN-only hosts will always fail.
+2. **Check your HMAC secret.** If your endpoint validates the `X-Samudra-Signature` header, ensure the secret in **Settings → Webhooks** matches the one used in your validation logic exactly (including case and whitespace).
+3. **Review the delivery log.** Go to **Settings → Webhooks → [Your Endpoint] → Delivery Log** to see recent attempts, HTTP status codes returned, and any error messages. Failed deliveries are retried up to three times with exponential back-off.
+4. **Respond with a 2xx status code.** Your endpoint must return an HTTP `200`–`299` response within 10 seconds, or Samudra will mark the delivery as failed.
+</Accordion>
+
+<Accordion title="Dashboard is slow to update or feels laggy">
+Samudra requires a modern, up-to-date browser to function correctly. Performance issues are most commonly caused by an outdated browser or a stale cache.
+
+**Steps to resolve:**
+
+1. **Check your browser version.** Samudra supports the latest two major releases of Chrome, Firefox, Edge, and Safari. Update your browser if needed.
+2. **Perform a hard refresh.** Press **Ctrl+Shift+R** on Windows/Linux or **Cmd+Shift+R** on macOS to bypass the cache and reload all assets.
+3. **Clear cached data.** If a hard refresh doesn't help, clear your browser's cache and cookies for `app.samudra.io`, then log back in.
+4. **Check your network latency.** Slow dashboard updates can also reflect high latency to Samudra's servers. Run a speed test or switch to a more stable network connection.
+5. **Disable browser extensions.** Ad blockers or privacy extensions occasionally interfere with real-time WebSocket connections. Try loading the dashboard in a private/incognito window to isolate extension interference.
+</Accordion>
+
+</AccordionGroup>
+
+---
+
+<Note>
+**Still stuck?** If you can't resolve your issue using the steps above, contact the Samudra support team at **support@samudra.io**. Please include your organization name, the affected pump ID, and a description of the issue so we can assist you as quickly as possible.
+</Note>

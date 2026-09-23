@@ -1,0 +1,118 @@
+---
+title: "Samudra Frequently Asked Questions"
+sidebarTitle: "FAQ"
+description: "Answers to the most common questions about Samudra accounts, pump compatibility, data retention, billing, and security."
+---
+
+Find quick answers to the most common questions about using Samudra. If you don't see what you're looking for, reach out to us at **support@samudra.io**.
+
+<AccordionGroup>
+
+<Accordion title="Which pump controllers does Samudra support?">
+Samudra is compatible with a broad range of industrial pump controllers that communicate over **Modbus TCP**, **MQTT**, or **REST-based APIs**. This includes controllers from major manufacturers such as Grundfos, Xylem, KSB, and Sulzer, as well as any generic controller that exposes a standard Modbus TCP interface.
+
+For a full list of certified-compatible hardware models, visit the [Compatibility Matrix](https://samudra.io/compatibility) on our website. If your controller is not listed, contact support — custom integrations are available on Enterprise plans.
+</Accordion>
+
+<Accordion title="How many pumps can I connect?">
+The number of pumps you can connect depends on your subscription plan:
+
+| Plan | Pumps Included |
+|------|----------------|
+| Starter | Up to 5 pumps |
+| Professional | Up to 25 pumps |
+| Enterprise | Unlimited |
+
+If you need to add more pumps beyond your plan's limit, you can purchase additional pump slots in **Settings → Billing**, or upgrade to the next plan tier.
+</Accordion>
+
+<Accordion title="Is my data encrypted?">
+Yes. Samudra protects your data both in transit and at rest:
+
+- **In transit:** All communication between your browser, Samudra's servers, and connected pump controllers uses **TLS 1.2 or higher**. Webhook payloads are signed with HMAC-SHA256 so you can verify their authenticity.
+- **At rest:** Operational data, metrics, and alert logs are stored in encrypted databases using **AES-256** encryption.
+- **Access control:** Authentication uses industry-standard OAuth 2.0 flows, and all API keys are hashed before storage — Samudra never stores your raw key.
+
+For a full overview of our security posture, see the [Security Overview](https://samudra.io/security) page.
+</Accordion>
+
+<Accordion title="What happens if my internet connection drops?">
+Samudra degrades gracefully during connectivity loss:
+
+- **Dashboard:** The UI will display a "Connection Lost" banner and metric values will freeze at the last known reading. No false alerts are triggered for data gaps shorter than your configured timeout.
+- **Control commands:** Commands issued while offline are **not buffered** — if the dashboard cannot reach Samudra's servers, the command will fail immediately with an error message rather than queuing silently. This is a safety decision to prevent unintended delayed actions.
+- **Physical controller:** Your pump controllers continue operating independently according to their last commanded state. Local safety logic (such as hardware emergency stops) remains active regardless of cloud connectivity.
+
+Once your connection is restored, the dashboard will resync and resume live polling automatically.
+</Accordion>
+
+<Accordion title="Can I use Samudra on a mobile device?">
+Yes. Samudra's web dashboard is fully responsive and works on modern mobile browsers (Chrome and Safari on iOS/Android). All core features — pump monitoring, ON/OFF control, alert review, and settings — are accessible on smaller screens.
+
+For the best experience in field environments, we recommend:
+- Using the dashboard in **landscape orientation** on phones.
+- Enabling **auto-brightness** or maximum brightness for outdoor readability.
+- Keeping your device charged, as real-time WebSocket connections can increase battery consumption.
+
+A dedicated native mobile app is on our roadmap. Sign up for product updates at [samudra.io/updates](https://samudra.io/updates) to be notified when it launches.
+</Accordion>
+
+<Accordion title="How do I transfer a pump to a different organization?">
+Pump transfers between organizations must be initiated by an **Admin** of the current organization:
+
+1. Go to **Settings → Pumps** and select the pump you want to transfer.
+2. Click **Transfer Ownership**.
+3. Enter the **Organization ID** of the receiving organization (the receiving Admin can find this in their **Settings → Organization** page).
+4. The receiving Admin will get an email invitation to accept the transfer.
+
+Once accepted, the pump — including its configuration and historical data — moves to the new organization. The original organization will immediately lose access. This action cannot be undone automatically; if you need to reverse a transfer, both Admins must agree and re-initiate the process.
+</Accordion>
+
+<Accordion title="What is the difference between Emergency Stop and turning the pump OFF?">
+These two actions have very different behaviors and should not be used interchangeably:
+
+| | OFF (Normal Stop) | Emergency Stop |
+|-|-------------------|----------------|
+| **Speed** | Controlled ramp-down | Immediate hard stop |
+| **Resume** | Tap ON to restart | Must manually issue a new ON command after verifying safe conditions |
+| **Use case** | Routine shutdown | Imminent safety risk |
+| **Logged as** | Normal operation | Critical event in Operational History |
+
+**Emergency Stop** is intended exclusively for situations where continued pump operation poses an immediate risk to personnel or equipment. Using it as a routine stop mechanism causes unnecessary wear on pump components and creates false entries in your safety audit log. For routine shutdowns, always use the standard **OFF** switch.
+</Accordion>
+
+<Accordion title="How do I cancel or change my subscription plan?">
+You can manage your subscription at any time in **Settings → Billing**:
+
+- **To upgrade:** Select your new plan and confirm. The change takes effect immediately and you'll be charged a prorated amount for the remainder of the billing cycle.
+- **To downgrade:** Select a lower plan. The change takes effect at the start of your next billing cycle. If your current pump count exceeds the new plan's limit, you will need to remove pumps before the downgrade is processed.
+- **To cancel:** Click **Cancel Subscription**. Your account remains active until the end of the current paid period, after which it converts to a read-only state. Historical data is retained for 90 days following cancellation.
+
+For billing questions or to discuss an Enterprise agreement, email **billing@samudra.io**.
+</Accordion>
+
+<Accordion title="Can I export my historical data?">
+Yes. Samudra supports data export in **CSV** and **JSON** formats.
+
+To export data:
+
+1. Navigate to the **Operational History** page for any pump.
+2. Use the date range picker to select the period you want to export.
+3. Click **Export** and choose your preferred format.
+
+Exports include timestamped metric readings, control command events, and alert history. Data retention periods depend on your plan (30 days on Starter, 12 months on Professional, custom on Enterprise). If you need a bulk export of all pumps across your organization, contact support to request an organization-wide data export.
+</Accordion>
+
+<Accordion title="How do I reset my password?">
+1. On the Samudra login page, click **Forgot password?**
+2. Enter the email address associated with your account and click **Send Reset Link**.
+3. Check your inbox (and spam folder) for an email from `noreply@samudra.io`.
+4. Click the link in the email — it is valid for **1 hour**.
+5. Enter and confirm your new password.
+
+If you're already logged in and want to change your password, go to **Settings → Account → Security → Change Password**.
+
+If you've lost access to your email address or are locked out of your account, contact **support@samudra.io** with your organization name and account details to verify your identity.
+</Accordion>
+
+</AccordionGroup>

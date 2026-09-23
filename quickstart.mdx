@@ -1,47 +1,80 @@
 ---
-title: "Quickstart"
-description: "Begin with a guide on the fastest path to a successful outcome"
+title: "Get Started with Samudra in 5 Minutes"
+sidebarTitle: "Quickstart"
+description: "Learn how to connect your first pump and monitor it live from the Samudra dashboard in just a few steps."
 ---
 
-Describe how someone begins using your product. What is the first thing they need to do? Are there any prerequisites?
-
-A quickstart should take someone from zero to using your product. They'll get a quick win and a sense of what they can accomplish.
+This guide walks you through signing up for Samudra, connecting your first pump, and performing your first control action from the dashboard. By the end you will have a live pump visible on the Equipment Status card and know how to start and stop it safely.
 
 ## Prerequisites
 
-Before you begin, you must have:
+Before you begin, make sure you have:
 
-- Requirement one (for example, Node.js 18+, a free account, an API key)
-- Requirement two (for example, a compatible device, a compatible browser, a compatible operating system)
-
-## Get started
+- A Samudra account (sign up at [app.samudra.io](https://app.samudra.io))
+- A compatible pump controller unit with network connectivity
+- The pump's serial number and network address (found on the unit's label)
 
 <Steps>
-  <Step title="Install">
-    Describe how to install your product or sign up.
+  <Step title="Create your Samudra account">
+    Go to [app.samudra.io](https://app.samudra.io) and click **Sign Up**. Enter your email address and choose a password. You will receive a verification email — click the link to activate your account.
 
-    ```bash
-    npm install your-package
-    ```
+    <Tip>
+      If your organization already has a Samudra account, ask your administrator to send you an invitation link instead of creating a new account.
+    </Tip>
   </Step>
-  <Step title="Configure">
-    Describe any setup or configuration needed before first use.
 
-    ```bash
-    your-cli init
-    ```
+  <Step title="Add your first pump">
+    After logging in, open the **Dashboard** and click **Add Pump** in the top-right corner. Fill in:
+
+    - **Name** — a descriptive label (e.g., "Main Intake Pump 1")
+    - **Serial Number** — printed on the pump controller unit
+    - **IP Address or Hostname** — the unit's address on your local network
+    - **Location** — optional, but helpful for multi-site deployments
+
+    Click **Connect**. Samudra will verify the connection and show the pump in your dashboard within a few seconds.
   </Step>
-  <Step title="Run it">
-    Show the first thing a user does to see it working.
 
-    ```bash
-    your-cli start
-    ```
+  <Step title="Check equipment status">
+    Your new pump appears as an Equipment Status card on the dashboard. The card shows:
+
+    - **Connection state** — green indicator when the unit is reachable
+    - **Running state** — the large **PUMP ON / PUMP OFF** pill switch
+    - **Live metrics** — flow rate, pressure, and temperature update every second
+
+    If the pump is currently running, the switch shows an emerald track with the thumb on the right and the label **PUMP ON**.
+  </Step>
+
+  <Step title="Start or stop the pump">
+    Tap or click the large pill switch on the Equipment Status card to toggle the pump between running and stopped states.
+
+    - **Emerald track, thumb right → PUMP ON** (running)
+    - **Grey track, thumb left → PUMP OFF** (stopped)
+
+    The switch updates immediately to reflect the confirmed hardware state. If the command fails, a brief error message appears below the switch.
+
+    <Warning>
+      To immediately cut power to the pump in an emergency, tap the crimson **EMERGENCY STOP** button located beside the ON/OFF switch. Emergency Stop bypasses normal shutdown sequencing. See [Emergency Stop](/dashboard/emergency-stop) for details.
+    </Warning>
+  </Step>
+
+  <Step title="Set your first alert">
+    Click the pump card's **Settings** icon (gear icon, top-right of the card) and select **Thresholds**. Set a maximum pressure value appropriate for your system. Samudra will send you a notification if that threshold is exceeded. See [Alerts](/monitoring/alerts) for more options.
   </Step>
 </Steps>
 
-<Tip>
-  Give people a way to get help. This could be a link to a support page, a chat with a customer support agent, or a forum for your product.
+## Next Steps
 
-  Example: Need help? Reach out to us at [support@yourcompany.com](mailto:support@yourcompany.com).
-</Tip>
+<CardGroup cols={2}>
+  <Card title="Dashboard Overview" icon="gauge-high" href="/dashboard/overview">
+    Explore every section of the main dashboard.
+  </Card>
+  <Card title="Pump Controls" icon="toggle-large-on" href="/dashboard/pump-controls">
+    Learn all the details of the ON/OFF switch and control confirmation flow.
+  </Card>
+  <Card title="Monitoring & Alerts" icon="bell" href="/monitoring/alerts">
+    Configure alert thresholds and notification channels.
+  </Card>
+  <Card title="API Reference" icon="code" href="/api/introduction">
+    Automate pump control and data retrieval via the REST API.
+  </Card>
+</CardGroup>

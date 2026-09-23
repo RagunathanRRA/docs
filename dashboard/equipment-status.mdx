@@ -1,0 +1,69 @@
+---
+title: "Equipment Status Card: Reading Live Pump Data"
+sidebarTitle: "Equipment Status"
+description: "Understand every field on the Samudra Equipment Status card, from the connection indicator and running state to live flow rate, pressure, and temperature readings."
+---
+
+# Equipment Status Card: Reading Live Pump Data
+
+The Equipment Status card is the primary window into a pump's current condition. Every card represents one physical pump unit registered to your site. All fields update in real time — there is no need to manually refresh the page or tap a sync button.
+
+## Card Layout
+
+Each card is divided into three horizontal zones:
+
+1. **Header row** — pump name, location tag, connection indicator, and running state badge
+2. **Metrics grid** — live sensor readings for flow rate, pressure, and temperature
+3. **Controls row** — the ON/OFF pill switch, runtime counter, and the Emergency Stop button
+
+## Field Reference
+
+### Connection Indicator
+
+The small circular dot in the top-left corner of the header row reflects the communication status between the Samudra cloud and the on-site gateway for that pump.
+
+A solid **emerald** dot means the gateway is online and data is streaming normally. A **grey** dot means the connection has been lost; controls will be disabled until communication is restored. A **pulsing amber** dot indicates a degraded connection where packets are being received intermittently.
+
+### Running State Badge
+
+The pill-shaped badge next to the pump name reads either **RUNNING** or **STOPPED** in bold text. This reflects the pump's actual confirmed state as reported by the gateway — not just the position of the ON/OFF switch. If the switch was toggled but confirmation has not yet been received, the badge displays **PENDING** with a spinner.
+
+### Flow Rate
+
+Displayed in litres per minute (L/min) or cubic metres per hour (m³/h), depending on your site's unit preference set in **Site Settings → Units**. The reading is updated every two seconds. A downward-pointing arrow indicator appears if flow drops more than 10% below the pump's configured nominal rate.
+
+### Pressure
+
+Displayed in bar or PSI. Shows the current discharge pressure at the pump outlet. An amber highlight appears if pressure exceeds the high-pressure warning threshold configured for that pump. A crimson highlight appears if the critical threshold is breached.
+
+### Temperature
+
+Motor winding temperature in degrees Celsius (°C) or Fahrenheit (°F). Elevated temperature readings are the earliest indicator of motor stress. An amber warning appears at 80 °C (176 °F) by default; the threshold is configurable per pump.
+
+### Runtime Counter
+
+A cumulative hours counter showing total confirmed run time since the last manual reset. Tap the counter on the Detail View to reset it (requires Operator or Admin role). This counter is useful for scheduling preventive maintenance intervals.
+
+## Status Indicator Color Reference
+
+The same color language is used consistently across all indicators on the card.
+
+| Color | Indicator | Meaning |
+|---|---|---|
+| Emerald | Connection dot, Running badge, Metrics | Normal — within configured parameters |
+| Amber | Connection dot, Metrics highlight | Warning — approaching threshold or degraded signal |
+| Crimson | Running badge, Metrics highlight, Controls area | Fault or Emergency — immediate attention required |
+| Grey | Connection dot, Running badge | Offline — pump stopped or gateway unreachable |
+| Blue | Running badge | Informational state change logged |
+
+## Real-Time Updates
+
+Cards receive a data push from the Samudra gateway every two seconds for sensor readings and immediately for state changes (start, stop, fault, emergency stop). A brief shimmer animation on a field value indicates it has just been refreshed. If the site gateway loses its upstream connection, all cards for that site display a **"Connection Lost"** overlay, values freeze at their last known reading, and the Alert Banner displays a gateway connectivity warning.
+
+## Pump Controls on the Card
+
+Each Equipment Status card includes the **PUMP ON/OFF switch** directly in the controls row for fast in-context operation. For a complete guide to using the switch, visual states, and confirmation behavior, see [Pump Controls](/dashboard/pump-controls).
+
+<Note>
+  In an urgent situation requiring immediate pump shutdown, use the **EMERGENCY STOP** button — the distinct crimson button adjacent to the ON/OFF switch — rather than toggling the switch to OFF. Emergency Stop bypasses the normal shutdown sequence and acts at the hardware level. See [Emergency Stop](/dashboard/emergency-stop) for full details.
+</Note>

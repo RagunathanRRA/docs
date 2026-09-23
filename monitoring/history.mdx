@@ -1,0 +1,74 @@
+---
+title: "Operational History: Audit Log and Metric Trends"
+sidebarTitle: "History"
+description: "Samudra records every pump state change, control action, and alert in a timestamped audit log. Learn how to search, filter, and export your operational history."
+---
+
+## What Gets Logged
+
+Samudra maintains a comprehensive, immutable audit log for every pump in your workspace. The following event types are recorded automatically — no configuration required:
+
+- **State changes** — transitions between pump states, such as OFF → ON, ON → OFF, and STANDBY → ON, including the source of the change (scheduled, manual, or automated rule)
+- **Emergency stops** — every Emergency Stop activation and subsequent reset, including which user triggered the action
+- **Threshold alerts** — when an alert fires, is acknowledged, and is dismissed, along with the metric value that triggered it
+- **User actions** — any control action taken by a user (start, stop, mode change, settings edit), attributed to the individual user account
+- **Connection events** — pump going offline, reconnecting, or losing a sensor signal
+
+Each log entry includes a UTC timestamp, the event type, the user responsible (if applicable), and a snapshot of key metric values at the moment the event occurred.
+
+## Accessing the History Log
+
+1. From the main dashboard, click the pump you want to review.
+2. In the expanded pump detail view, select the **History** tab.
+3. The log loads with the most recent events at the top, paginated in groups of 50.
+
+You can also access a workspace-wide log — covering all pumps — under **Settings → Audit Log**. This view is useful for compliance reviews or investigating incidents that span multiple pieces of equipment.
+
+## Filtering Events
+
+Use the filter bar at the top of the History tab to narrow the log to exactly the events you need:
+
+| Filter | Options |
+|---|---|
+| **Date Range** | Preset options (Today, Last 7 days, Last 30 days) or a custom start/end date picker |
+| **Event Type** | State Change, Emergency Stop, Alert, User Action, Connection |
+| **User** | Filter by individual user account to review a specific operator's actions |
+| **Severity** | Info, Warning, Critical (applies to alert events) |
+
+Multiple filters can be applied simultaneously. The active filter count is shown as a badge on the filter bar so you always know when the view is narrowed.
+
+## Event Detail View
+
+Clicking any row in the history log expands the **Event Detail** panel, which provides full context for that event:
+
+- **Timestamp** — precise date and time in UTC and your local timezone
+- **User** — the account that performed the action, including display name and email
+- **Before / After State** — the pump state immediately before and after the event
+- **Metrics at Time of Event** — a snapshot of flow rate, pressure, temperature, and runtime captured at the moment the event was logged
+- **Related Alerts** — any alerts that were active or fired within 60 seconds of the event, hyperlinked for quick cross-reference
+
+This full context is especially useful when investigating why a pump stopped or what conditions preceded an emergency stop.
+
+## Exporting History
+
+To download log data for compliance reporting, maintenance records, or external analysis:
+
+1. Apply any filters you want to scope the export.
+2. Click **Export** in the top-right corner of the History tab.
+3. Select **CSV** format.
+4. Click **Download**. Samudra generates the file and begins the download immediately.
+
+Exported CSV files include all columns shown in the detail view: timestamp, event type, user, severity, before/after state, and metric snapshots. Large exports (over 10,000 rows) are queued and delivered to your registered email address within a few minutes.
+
+## Retention Policy
+
+| Plan | History Retention |
+|---|---|
+| Standard | 90 days |
+| Enterprise | 1 year |
+
+Events older than the retention window for your plan are permanently deleted and cannot be recovered. If your compliance requirements demand longer retention, export and archive logs regularly, or contact [Samudra Support](mailto:support@samudra.io) to discuss Enterprise options.
+
+<Tip>
+**Use history to investigate incidents.** When an unexpected pump shutdown or sensor spike occurs, start by finding the relevant alert entry in the History tab. Note its exact timestamp, then open the 24-hour trend chart for that metric (available from the Live Metrics panel) to see the trajectory leading up to the event. Cross-referencing alert timestamps with metric trends often reveals whether a fault was sudden or developed gradually over hours.
+</Tip>

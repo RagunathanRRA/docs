@@ -1,0 +1,148 @@
+---
+title: "Pump Control API: Start, Stop, and Emergency Stop"
+sidebarTitle: "Controls"
+description: "POST /v1/pumps/{id}/control sends start or stop commands. POST /v1/pumps/{id}/emergency-stop triggers an immediate hardware-level shutdown."
+---
+
+## Overview
+
+The Controls API lets you programmatically start and stop pumps, and trigger emergency stops when necessary. Control commands are forwarded to the pump controller in real time — the pump must be `online` to receive them.
+
+<Note>
+  Control endpoints require a **full-access API key** (prefix `sk_live_`). Read-only keys (`sk_ro_`) will receive a `403 Forbidden` response. See [Authentication](/api/authentication) for details.
+</Note>
+
+---
+
+## Start or Stop a Pump
+
+Sends a `start` or `stop` command to the specified pump.
+
+```
+POST /v1/pumps/{id}/control
+```
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `id` | string | Yes | The unique pump ID (e.g., `pump_abc123`). |
+
+### Request Body
+
+```json
+{
+  "action": "start"
+}
+```
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `action` | string | Yes | The command to send. Must be one of `start` or `stop`. |
+
+### Example Requests
+
+**Start a pump:**
+
+```bash
+curl -X POST https://api.samudra.io/v1/pumps/pump_abc123/control \
+  -H "Authorization: Bearer sk_live_your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"action": "start"}'
+```
+
+**Stop a pump:**
+
+```bash
+curl -X POST https://api.samudra.io/v1/pumps/pump_abc123/control \
+  -H "Authorization: Bearer sk_live_your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"action": "stop"}'
+```
+
+### Example Response
+
+```json
+{
+  "id": "pump_abc123",
+  "name": "Main Intake Pump 1",
+  "location": "Site A - North Well",
+  "status": "online",
+  "running_state": "on",
+  "ip_address": "192.168.1.45",
+  "last_seen_at": "2024-03-15T14:35:10Z",
+  "created_at": "2024-01-10T09:00:00Z"
+}
+```
+
+The response is the updated pump object reflecting the new `running_state`.
+
+### Error Responses
+
+| HTTP Status | Error Code | Description |
+|---|---|---|
+| `400 Bad Request` | `invalid_action` | The `action` field is missing or not one of `start` / `stop`. |
+| `403 Forbidden` | `insufficient_permissions` | The API key does not have permission to issue control commands. |
+| `404 Not Found` | `pump_not_found` | No pump with the given ID exists in your organization. |
+| `409 Conflict` | `pump_offline` | The pump is currently offline and cannot receive commands. |
+
+---
+
+## Emergency Stop
+
+Triggers an immediate, hardware-level shutdown of the specified pump, bypassing the normal controlled stop sequence.
+
+```
+POST /v1/pumps/{id}/emergency-stop
+```
+
+<Warning>
+  **Emergency stop is immediate and irreversible once triggered.** It cuts power to the pump motor at the hardware level, bypassing all normal shutdown procedures. This can cause water hammer, pressure surges, or mechanical stress if the pump is operating at high flow rates. Use this endpoint **only in genuine emergency situations** — for routine shutdowns, use [`POST /v1/pumps/{id}/control`](#start-or-stop-a-pump) with `"action": "stop"`.
+</Warning>
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `id` | string | Yes | The unique pump ID (e.g., `pump_abc123`). |
+
+### Request Body
+
+No request body is required for this endpoint.
+
+### Example Request
+
+```bash
+curl -X POST https://api.samudra.io/v1/pumps/pump_abc123/emergency-stop \
+  -H "Authorization: Bearer sk_live_your_api_key_here"
+```
+
+### Example Response
+
+```json
+{
+  "id": "pump_abc123",
+  "action": "emergency_stop",
+  "acknowledged": true,
+  "stopped_at": "2024-03-15T14:40:22Z",
+  "message": "Emergency stop command delivered. Pump motor has been shut down immediately."
+}
+```
+
+### Response Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | string | The ID of the pump that was stopped. |
+| `action` | string | Always `emergency_stop` for this endpoint. |
+| `acknowledged` | boolean | `true` if the pump controller confirmed receipt of the command. |
+| `stopped_at` | string | ISO 8601 timestamp of when the emergency stop was executed. |
+| `message` | string | A human-readable confirmation message. |
+
+### Error Responses
+
+| HTTP Status | Error Code | Description |
+|---|---|---|
+| `403 Forbidden` | `insufficient_permissions` | The API key does not have permission to issue control commands. |
+| `404 Not Found` | `pump_not_found` | No pump with the given ID exists in your organization. |
+| `409 Conflict` | `pump_offline` | The pump is offline; the emergency stop command could not be delivered. |

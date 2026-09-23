@@ -1,0 +1,67 @@
+---
+title: "Pump Alerts: Configure Thresholds and Notifications"
+sidebarTitle: "Alerts"
+description: "Set custom alert thresholds for pump metrics in Samudra and choose how you receive notifications — in-dashboard banners, email, or webhook."
+---
+
+## What Are Alerts?
+
+Alerts are automated notifications that fire when a pump metric crosses a value you have defined as significant. Rather than watching dashboards continuously, you configure thresholds once and let Samudra notify you the moment a reading leaves the acceptable range — whether that is pressure climbing too high, temperature exceeding safe operating limits, or flow rate dropping below the minimum required for your process.
+
+Alerts do not control the pump directly. They surface information so that operators can take informed action. For hardware-level intervention, see the note at the bottom of this page.
+
+## Creating an Alert Threshold
+
+<Steps>
+  <Step title="Open Pump Settings">
+    From the dashboard, click the pump you want to configure. In the expanded panel, click the **Settings** (gear) icon in the top-right corner of the pump detail view.
+  </Step>
+  <Step title="Go to the Thresholds Tab">
+    Select the **Thresholds** tab from the settings sidebar. Any thresholds already configured for this pump are listed here.
+  </Step>
+  <Step title="Add a New Threshold">
+    Click **+ Add Threshold**. Choose the metric (Flow Rate, Pressure, or Temperature), set the condition (above or below), enter the trigger value, and select a severity level. Click **Save Threshold** to activate it immediately.
+  </Step>
+</Steps>
+
+You can add multiple thresholds per metric — for example, a **Warning** at 70 °C and a **Critical** at 85 °C — so that operators receive escalating alerts as conditions worsen.
+
+## Alert Severity Levels
+
+Samudra supports three severity levels, each with distinct visual and behavioral treatment in the dashboard:
+
+| Severity | Color | Typical Use |
+|---|---|---|
+| **Info** | Blue | Conditions worth noting but not immediately actionable (e.g., pump runtime exceeds 8 hours) |
+| **Warning** | Amber | Metric approaching an unsafe range; investigate soon |
+| **Critical** | Red | Metric in an unsafe range; immediate operator attention required |
+
+## Notification Channels
+
+Each threshold can deliver notifications through one or more channels:
+
+- **In-Dashboard Banner** — a persistent banner appears at the top of the Samudra interface for every active alert. Banners remain visible until the alert is acknowledged.
+- **Email** — Samudra sends a formatted email to the addresses listed under **Settings → Notifications → Email Recipients**. You can specify different recipient lists per severity level.
+- **Webhook** — POST a JSON payload to any endpoint you specify, enabling integration with Slack, PagerDuty, or your own incident management system. Configure webhook URLs under **Settings → Notifications → Webhooks**.
+
+## Acknowledging and Dismissing Alerts
+
+When an alert fires, the in-dashboard banner displays the pump name, metric, current value, and threshold that was breached.
+
+- **Acknowledge** — click **Acknowledge** to mark the alert as seen. The banner changes to a muted style to indicate another operator is aware, but the alert remains active until the condition clears.
+- **Dismiss** — once the underlying condition has resolved (either automatically when the metric returns to range, or manually after on-site inspection), click **Dismiss** to remove the banner from the active alerts list. Dismissed alerts are preserved in the Alert History.
+
+## Alert History
+
+All past alerts, including their severity, trigger time, resolution time, and acknowledging user, are available under **Dashboard → [Pump] → History → Alerts**. You can filter alert history by date range, severity, and metric. See [Operational History](/monitoring/history) for full details on filtering and export.
+
+## Best Practices for Setting Thresholds
+
+- **Start conservative.** Set initial thresholds wider than you think necessary and narrow them once you have observed the pump's normal operating range over several days.
+- **Use two-tier thresholds.** Set a Warning level at ~80 % of the critical limit so operators have time to respond before conditions become dangerous.
+- **Review thresholds after maintenance.** If a pump is serviced or modified, its operating characteristics may change. Revisit thresholds to keep them accurate.
+- **Avoid alert fatigue.** Too many low-severity alerts cause operators to tune them out. Reserve Info-level alerts for conditions that genuinely require a follow-up action.
+
+<Note>
+**Emergency Stop is a hardware control, not an alert.** Alerts notify operators of conditions; they do not stop the pump. To immediately halt a pump from the dashboard, use the Emergency Stop control described in [Emergency Stop](/dashboard/emergency-stop).
+</Note>

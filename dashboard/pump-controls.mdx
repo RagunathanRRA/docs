@@ -1,0 +1,59 @@
+---
+title: "Pump ON/OFF Switch: Controlling Pump Running State"
+sidebarTitle: "Pump Controls"
+description: "Use the large tactile Pump ON/OFF switch on the Equipment Status card to start and stop pumps. Learn what each visual state means and how the control responds."
+---
+
+# Pump ON/OFF Switch: Controlling Pump Running State
+
+The **PUMP ON/OFF switch** is the primary control for starting and stopping a pump through the Samudra dashboard. It is built as an oversized tactile pill switch — large enough to operate confidently while wearing gloves, in direct sunlight, without needing to look twice.
+
+<Warning>
+  For urgent or hazardous situations, do **not** use the ON/OFF switch. Use the **EMERGENCY STOP** button instead — it acts immediately at the hardware level and bypasses the normal shutdown sequence. See [Emergency Stop](/dashboard/emergency-stop).
+</Warning>
+
+## Visual Design
+
+The ON/OFF switch sits in the **controls row** at the bottom of each Equipment Status card. It has a minimum height of **56 px** and a minimum width of **120 px**, meeting Samudra's gloved-thumb accessibility standard. The switch label is displayed in bold, high-contrast text directly on the track.
+
+| State | Track Color | Thumb Position | Thumb Color | Label |
+|---|---|---|---|---|
+| **ON** | Emerald | Right | White | PUMP ON |
+| **OFF** | Medium grey | Left | White | PUMP OFF |
+| **Pending** | Amber (animated pulse) | Centre (transitioning) | White | UPDATING… |
+| **Disabled** | Light grey (low opacity) | Left or Right | Light grey | PUMP ON / OFF |
+
+The thumb is a solid circle that slides smoothly between positions. The transition animation takes 200 ms so the motion is clearly visible without creating perceptible lag.
+
+## How to Toggle the Switch
+
+**Tap or click** anywhere on the pill switch body — the thumb, the track, or the label text — to toggle between ON and OFF. You do not need to drag or swipe; a single tap anywhere on the control registers the action.
+
+On touch devices, the 56 px minimum target height means the switch is reliably hit even with a gloved finger without requiring precision. On desktop, a standard mouse click anywhere on the switch triggers the toggle.
+
+## Confirmation Feedback
+
+After you tap the switch, Samudra sends a command to the site gateway and waits for hardware confirmation.
+
+**On success:** The switch transitions through the Pending amber state (typically 1–3 seconds) and then settles into the new ON or OFF visual state. The Running State badge on the card header simultaneously updates from **PENDING** to **RUNNING** or **STOPPED**. A brief haptic pulse is provided on supported mobile devices.
+
+**On failure:** If the command times out or the gateway returns an error, the switch snaps back to its previous position and an inline error message appears below the controls row: *"Command failed — check connection and try again."* The Alert Banner also registers a warning-level event for the failed control action.
+
+## When Controls Are Disabled
+
+The ON/OFF switch is rendered in its disabled visual state (low-opacity grey, non-interactive) in the following situations:
+
+- **Connection lost** — the Samudra gateway for that pump is unreachable. Controls are restored automatically when the connection recovers.
+- **Viewer role** — your account has been assigned the Viewer permission level, which grants read-only access. Contact your site Admin to request Operator access.
+- **Active fault** — certain critical fault conditions lock out software controls until the fault is acknowledged and cleared at the hardware level. The card will display the specific fault code in the Running State badge.
+- **Emergency Stop active** — after an Emergency Stop has been triggered, the ON/OFF switch is locked until the emergency stop is cleared and the pump is manually reset. See [Emergency Stop](/dashboard/emergency-stop) for the restart procedure.
+
+## Keyboard and Accessibility
+
+The ON/OFF switch is fully keyboard accessible. When focused (via `Tab` key), the switch displays a visible focus ring in Samudra blue. Press `Space` or `Enter` to toggle the switch. The switch exposes the correct ARIA role (`switch`) and `aria-checked` state so screen readers announce the current position as "on" or "off".
+
+The high-contrast color scheme (emerald on white, white thumb on emerald/grey) meets WCAG 2.1 AA contrast requirements for both the ON and OFF states.
+
+<Tip>
+  If you manage multiple pumps and need to start or stop several at once, open each pump's Detail View and use the batch controls available in **Site Settings → Batch Operations** rather than toggling cards individually. Batch operations also produce a single grouped audit log entry.
+</Tip>

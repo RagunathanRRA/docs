@@ -1,0 +1,80 @@
+---
+title: "Emergency Stop: Immediate Pump Shutdown"
+sidebarTitle: "Emergency Stop"
+description: "The Samudra Emergency Stop button immediately halts pump operation at the hardware level. Learn when to use it, what happens after, and how to safely restart."
+---
+
+# Emergency Stop: Immediate Pump Shutdown
+
+The **Emergency Stop** feature provides a single, unambiguous action to immediately cut power to a pump in any situation where continued operation poses a risk to personnel, equipment, or infrastructure. It is the fastest path from a live, running pump to a fully halted state.
+
+<Warning>
+  Triggering Emergency Stop is **immediate and irreversible** until manually reset. The pump will shut down the instant the command reaches the hardware gateway — there is no confirmation dialog, no countdown, and no automatic restart. Only use Emergency Stop when prompt action is required.
+</Warning>
+
+<Note>
+  The **EMERGENCY STOP** button is a completely separate control from the **PUMP ON/OFF switch**. It is physically distinct on the card — rendered in Samudra crimson, clearly labeled, and always visible in the controls row regardless of the pump's current running state. This separation is intentional: it prevents accidental activation during routine ON/OFF operation while keeping Emergency Stop instantly accessible in a crisis.
+</Note>
+
+## What Emergency Stop Does
+
+Triggering Emergency Stop sends a high-priority hardware-level command directly to the pump's control interface via the Samudra gateway. Unlike the standard OFF command — which initiates a controlled shutdown sequence that ramps down flow and closes valves in order — Emergency Stop:
+
+- **Immediately cuts power** to the pump motor
+- **Bypasses the normal shutdown sequence**, including ramp-down and valve staging
+- **Locks out software controls** so the pump cannot be restarted remotely until the emergency stop is cleared
+- **Generates a fault record** in the pump's event log and in the Samudra audit trail
+
+This is the equivalent of a hardwired emergency stop circuit: designed for speed and safety, not graceful operation.
+
+## How to Trigger Emergency Stop
+
+The **EMERGENCY STOP** button is located in the controls row of the Equipment Status card, adjacent to but visually separated from the PUMP ON/OFF switch. It is rendered in **Samudra crimson** with bold white label text and meets the same **56 px minimum touch target** standard as all other controls.
+
+To trigger it: **tap or click the EMERGENCY STOP button once**. There is no confirmation step. The command is dispatched immediately upon the single tap.
+
+On devices that support haptics, a strong double-pulse vibration confirms the action. The button briefly inverts to white-on-crimson while the command is in flight, then returns to its standard crimson state once hardware acknowledgement is received.
+
+## What Happens After Emergency Stop
+
+Within seconds of triggering Emergency Stop, the following changes occur across the dashboard:
+
+- The pump's **Running State badge** changes to **EMERGENCY STOP** in crimson text
+- The **PUMP ON/OFF switch** enters its **disabled state** and cannot be toggled
+- The **Equipment Status card** border turns crimson to flag the affected pump at a glance
+- A **crimson Alert Banner** appears at the top of the dashboard with the pump name, timestamp, and the identity of the user who triggered the stop
+- An **email and/or SMS notification** is dispatched to all users on the site's alert contact list (configurable in **Site Settings → Notifications**)
+- A permanent **audit log entry** is written recording the action, user, timestamp, and the pump's last known sensor readings at the moment of the stop
+
+## Who Can Trigger Emergency Stop
+
+Emergency Stop is available to users with the **Operator** or **Admin** role. Users with the **Viewer** role can see the button but it is rendered as disabled for their session. Role assignments are managed in **Site Settings → Team**.
+
+## Resuming Normal Operation After Emergency Stop
+
+Restarting a pump after an Emergency Stop requires deliberate manual steps to ensure the underlying cause has been identified and resolved before the pump is returned to service.
+
+<Steps>
+  <Step title="Investigate the cause">
+    Before doing anything else, determine why Emergency Stop was triggered. Review the pump's event log in the Detail View, check physical conditions at the pump site, and confirm the issue has been resolved.
+  </Step>
+  <Step title="Clear the Emergency Stop fault on the hardware">
+    Go to the physical pump control panel and reset the emergency stop interlock according to the manufacturer's procedure. This step cannot be done remotely through Samudra — it requires physical presence at the equipment.
+  </Step>
+  <Step title="Confirm hardware reset in Samudra">
+    Once the hardware interlock has been cleared, the Equipment Status card will update: the Running State badge changes from **EMERGENCY STOP** to **STOPPED**, and the PUMP ON/OFF switch becomes interactive again. This may take up to 10 seconds for the gateway to detect and report the hardware state change.
+  </Step>
+  <Step title="Acknowledge the alert in Samudra">
+    In the Alert Banner or full Alert List, tap the Emergency Stop alert and select **Acknowledge**. Add a resolution note (recommended) describing what caused the stop and how it was resolved. This closes the alert and updates the audit log.
+  </Step>
+  <Step title="Restart the pump">
+    With the fault cleared and the alert acknowledged, use the **PUMP ON/OFF switch** on the Equipment Status card to return the pump to running state. Monitor the sensor readings closely for the first few minutes to confirm normal operation has resumed.
+  </Step>
+</Steps>
+
+## Safety Recommendations
+
+- **Use Emergency Stop for safety-critical situations** — mechanical noise, visible smoke, flooding, pressure surges, or any situation where personnel are at risk. For routine shutdowns, use the standard PUMP ON/OFF switch.
+- **Always investigate before restarting** — an Emergency Stop that was triggered by a real fault condition can cause damage or injury if the pump is restarted before the root cause is resolved.
+- **Train all operators on the button's location** — familiarity with the UI layout in advance means operators can act immediately in high-stress situations without searching for the control.
+- **Test the Emergency Stop function periodically** during planned maintenance windows to confirm the hardware interlock and gateway communication are functioning correctly.

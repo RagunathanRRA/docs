@@ -1,0 +1,71 @@
+---
+title: "Samudra Account Setup and Team Management"
+sidebarTitle: "Account Setup"
+description: "Set up your Samudra account, invite teammates, configure roles, and manage organization settings before connecting any equipment."
+---
+
+Before you connect pumps and start monitoring, take a few minutes to configure your Samudra organization. This page covers creating your account, inviting team members, assigning roles, and adjusting organization-wide settings.
+
+## Creating Your Account
+
+Go to [app.samudra.io/signup](https://app.samudra.io/signup) and enter your work email address. After email verification, you will be prompted to:
+
+1. **Name your organization** — this label appears across the dashboard and in notifications.
+2. **Choose a plan** — select the tier that matches your number of pumps and users.
+3. **Set your timezone** — all timestamps in logs, alerts, and metrics display in this timezone.
+
+## Inviting Team Members
+
+<Steps>
+  <Step title="Open Organization Settings">
+    In the top-right menu, click your avatar and select **Organization Settings**.
+  </Step>
+  <Step title="Go to Members">
+    Click the **Members** tab and then **Invite Member**.
+  </Step>
+  <Step title="Enter details">
+    Type the team member's email address and select their role. Click **Send Invite**. The invitee receives an email with a sign-up link that is valid for 72 hours.
+  </Step>
+</Steps>
+
+## Roles and Permissions
+
+Samudra uses three built-in roles:
+
+| Role | Can View | Can Control Pumps | Can Configure Alerts | Can Manage Members |
+|---|---|---|---|---|
+| **Viewer** | ✓ | — | — | — |
+| **Operator** | ✓ | ✓ | ✓ | — |
+| **Admin** | ✓ | ✓ | ✓ | ✓ |
+
+<Info>
+  Emergency Stop is available to Operators and Admins only. Viewers can see the Equipment Status card but the controls are read-only.
+</Info>
+
+## API Keys
+
+If you plan to integrate Samudra with external systems via the REST API, generate an API key:
+
+1. Go to **Organization Settings → API Keys**.
+2. Click **Generate New Key** and give it a descriptive name (e.g., "SCADA Integration").
+3. Copy the key immediately — it is shown only once.
+4. Store the key securely in your secrets manager or environment variables.
+
+See [API Authentication](/api/authentication) for how to use the key in requests.
+
+## Security Recommendations
+
+<CardGroup cols={2}>
+  <Card title="Use Strong Passwords" icon="lock">
+    Samudra enforces a minimum of 12 characters. We recommend using a password manager.
+  </Card>
+  <Card title="Enable Two-Factor Authentication" icon="shield-halved">
+    Enable 2FA under **Account Settings → Security** for an extra layer of protection.
+  </Card>
+  <Card title="Rotate API Keys Regularly" icon="rotate">
+    Revoke and regenerate API keys periodically, especially after team member offboarding.
+  </Card>
+  <Card title="Review Member Access" icon="users">
+    Audit your Members list quarterly and remove users who no longer require access.
+  </Card>
+</CardGroup>

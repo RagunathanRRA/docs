@@ -1,0 +1,62 @@
+---
+title: "Samudra Dashboard: Layout and Navigation Guide"
+sidebarTitle: "Overview"
+description: "A complete guide to the Samudra dashboard layout, including the Equipment Status cards, live metrics panel, alert banners, and navigation controls."
+---
+
+# Samudra Dashboard: Layout and Navigation Guide
+
+The Samudra dashboard gives pump operators and site managers a unified, real-time view of every monitored pump in a facility. Designed for demanding field environments — bright sunlight, gloved hands, and time-critical decisions — the interface prioritizes clarity and speed above all else.
+
+## Dashboard Layout
+
+When you log in, the dashboard opens to the main **Operations View**. The layout is divided into four primary sections:
+
+<CardGroup cols={2}>
+  <Card title="Equipment Status Cards" icon="gauge-high">
+    A scrollable grid of cards — one per monitored pump. Each card shows connection state, running state, live sensor readings, and the pump's ON/OFF control switch. Cards update in real time without requiring a page refresh.
+  </Card>
+  <Card title="Live Metrics Panel" icon="chart-line">
+    A collapsible sidebar on the right-hand side that aggregates system-wide metrics: total flow rate across all active pumps, combined power draw, and a rolling 24-hour performance chart. Tap the panel handle to expand or collapse it.
+  </Card>
+  <Card title="Alert Banner" icon="triangle-exclamation">
+    A persistent horizontal band at the top of the screen that displays the highest-priority active alert. Tap the banner to expand the full alert list, which shows all unresolved warnings and faults sorted by severity. The banner is hidden when no alerts are active.
+  </Card>
+  <Card title="Navigation Controls" icon="bars">
+    The bottom navigation bar (mobile) or left sidebar (tablet/desktop) provides access to the main Operations View, historical Reports, Site Settings, and your user Account. Active section is highlighted with an emerald indicator.
+  </Card>
+</CardGroup>
+
+## Reading Status at a Glance
+
+Every pump card and alert in Samudra uses a consistent color language. You can assess the health of your entire fleet in seconds without reading a single number.
+
+| Color | Meaning |
+|---|---|
+| **Emerald / Green** | Nominal — pump is running normally within all set parameters |
+| **Amber / Yellow** | Warning — a parameter is approaching its threshold; attention recommended |
+| **Crimson / Red** | Fault or Emergency — immediate action required; pump may be stopped or at risk |
+| **Grey** | Offline — pump is powered off, or the Samudra gateway has lost connection |
+| **Blue** | Informational — a status change or non-critical event has been logged |
+
+The same color coding applies to the connection indicator dot, the running state badge, and the alert banner background, so there is no ambiguity between sections of the UI.
+
+## Navigating Between Pumps
+
+On installations with more than one monitored pump, use the Equipment Status card grid to scroll horizontally (mobile) or browse the full grid layout (tablet/desktop). Tap any card to open its **Detail View**, which expands all sensor history, event logs, and control options for that specific pump.
+
+Use the **Site Map** shortcut in the navigation bar to jump directly to a pump by its physical location tag, which is useful on large sites with dozens of units.
+
+## Understanding Real-Time Updates
+
+All data on the Samudra dashboard is streamed live over a persistent connection to the Samudra gateway installed at your site. You do not need to manually refresh. A subtle pulse animation on the connection indicator dot confirms that live data is flowing. If the connection is interrupted, cards dim and display a "Connection Lost" overlay until the link is restored.
+
+<Tip>
+  Every interactive element on the Samudra dashboard — buttons, switches, and navigation items — meets a **56 px minimum touch target size**. This design ensures reliable, confident operation even when wearing heavy work gloves in outdoor environments. You should never need to remove your gloves to interact with any control.
+</Tip>
+
+## Next Steps
+
+- [Equipment Status Card](/dashboard/equipment-status) — understand every field on a pump card
+- [Pump Controls](/dashboard/pump-controls) — start and stop pumps using the ON/OFF switch
+- [Emergency Stop](/dashboard/emergency-stop) — immediately halt a pump in a critical situation

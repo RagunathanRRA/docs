@@ -1,0 +1,63 @@
+---
+title: "Pump Settings: Name, Location, and Connection"
+sidebarTitle: "Pump Settings"
+description: "Configure each pump's display name, physical location, connection details, and controller settings in the Samudra dashboard."
+---
+
+## Opening Pump Settings
+
+There are two ways to reach the settings panel for any pump:
+
+- **From the Equipment Status card:** Click the **gear icon (⚙)** in the top-right corner of the pump's card on the main dashboard.
+- **From the navigation menu:** Go to **Dashboard → Pumps**, select the pump you want to configure, then click the **Settings** tab.
+
+---
+
+## Configurable Fields
+
+The table below lists every field available in pump settings, along with its type, default value, and a short description.
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| **Name** | String (max 60 chars) | `Unnamed Pump` | Human-readable label shown throughout the dashboard and in alert messages. |
+| **Location / Site Tag** | Free text | *(empty)* | Physical location or site identifier — for example, `Building A – Basement Level 2`. Used for filtering and reporting. |
+| **IP Address / Hostname** | String | *(empty)* | The network address of the pump controller. Accepts both IPv4 addresses (e.g., `192.168.1.45`) and hostnames (e.g., `pump-controller-01.local`). |
+| **Port** | Integer | `9100` | TCP port used to communicate with the controller. Change this only if your controller is configured on a non-standard port. |
+| **Poll Interval** | Integer (seconds) | `1` | How frequently Samudra queries the controller for new readings. Lower values increase data resolution but may increase network load. Minimum allowed: `1 s`; maximum: `60 s`. |
+| **Display Units** | Select | `Metric` | Choose between **Metric** (bar, °C, m³/h) and **Imperial** (psi, °F, GPM) for all values shown in the dashboard and alerts for this pump. |
+
+---
+
+## Testing the Connection
+
+After entering or updating the IP address, hostname, or port, verify connectivity before saving:
+
+1. Click **Test Connection** at the bottom of the settings panel.
+2. Samudra will attempt to reach the controller and display one of three results:
+   - ✅ **Connected** — the controller responded successfully.
+   - ⚠️ **Timeout** — the controller did not respond within 5 seconds. Check the address and ensure the device is online.
+   - ❌ **Refused** — the connection was actively rejected. Verify the port number and any firewall rules between Samudra and the controller.
+
+Connection test results are not saved to pump history and do not generate alerts.
+
+---
+
+## Saving Changes
+
+Click **Save Settings** to apply your changes. Samudra will immediately begin using the new configuration — including the updated poll interval and display units — without requiring a page reload.
+
+---
+
+## Deleting a Pump
+
+To remove a pump from your organization:
+
+1. Open its **Settings** panel.
+2. Scroll to the **Danger Zone** section and click **Delete Pump**.
+3. Type the pump's name to confirm, then click **Confirm Delete**.
+
+**What happens to historical data:** All sensor readings, alert events, and logs for the deleted pump are retained in your organization's data storage for 90 days before permanent deletion. During that window, you can export the historical data via **Dashboard → Reports → Export**. After 90 days the data is permanently removed and cannot be recovered.
+
+<Note>
+Deleting a pump does not affect other pumps or any organization-level notification settings.
+</Note>

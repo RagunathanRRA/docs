@@ -1,0 +1,98 @@
+---
+title: "Samudra REST API: Overview and Getting Started"
+sidebarTitle: "API Overview"
+description: "The Samudra REST API lets you control pumps, retrieve live metrics, and manage alerts programmatically. All requests use HTTPS and Bearer token authentication."
+---
+
+## Base URL
+
+All API requests are made to the following base URL:
+
+```
+https://api.samudra.io/v1
+```
+
+The API version (`v1`) is embedded directly in the URL path. When breaking changes are introduced, a new version path will be released and announced in advance.
+
+## Request and Response Format
+
+Every request and response body uses **JSON**. Make sure to set the `Content-Type` header to `application/json` on requests that include a body (e.g., POST requests).
+
+## Authentication
+
+All requests must be authenticated using a **Bearer token** passed in the `Authorization` header:
+
+```
+Authorization: Bearer <your-api-key>
+```
+
+API keys are generated from the Samudra dashboard under **Organization Settings → API Keys**. See the [Authentication guide](/api/authentication) for full details on generating keys, understanding key scopes, and revoking keys.
+
+## Rate Limits
+
+The API enforces a rate limit of **120 requests per minute** per API key. If you exceed this limit, the API returns a `429 Too Many Requests` response. Your integration should handle this gracefully by implementing exponential backoff and retry logic.
+
+The response headers on every request include your current rate limit status:
+
+| Header | Description |
+|---|---|
+| `X-RateLimit-Limit` | Maximum requests allowed per minute |
+| `X-RateLimit-Remaining` | Requests remaining in the current window |
+| `X-RateLimit-Reset` | Unix timestamp when the window resets |
+
+## Versioning
+
+The current stable version of the Samudra API is **v1**. The version is always specified as part of the URL path (e.g., `/v1/pumps`). Legacy versions will receive a deprecation notice at least 90 days before being retired.
+
+## Error Format
+
+When a request fails, the API returns a structured JSON error body alongside the appropriate HTTP status code:
+
+```json
+{
+  "error": {
+    "code": "pump_not_found",
+    "message": "No pump with ID pump_abc123 found in your organization.",
+    "request_id": "req_xyz789"
+  }
+}
+```
+
+| Field | Description |
+|---|---|
+| `code` | A machine-readable string identifying the error type |
+| `message` | A human-readable description of what went wrong |
+| `request_id` | A unique identifier for the request — include this when contacting support |
+
+## HTTP Status Codes
+
+| Status Code | Meaning |
+|---|---|
+| `200 OK` | Request succeeded |
+| `201 Created` | Resource was successfully created |
+| `400 Bad Request` | The request body or parameters are invalid |
+| `401 Unauthorized` | API key is missing or invalid |
+| `403 Forbidden` | API key does not have permission for this action |
+| `404 Not Found` | The requested resource does not exist |
+| `429 Too Many Requests` | Rate limit exceeded |
+| `500 Internal Server Error` | An unexpected error occurred on the Samudra servers |
+
+## Explore the API
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/api/authentication">
+    Generate API keys and authenticate your requests.
+  </Card>
+  <Card title="Pumps" icon="gauge" href="/api/pumps">
+    List and retrieve pump status and configuration.
+  </Card>
+  <Card title="Controls" icon="sliders" href="/api/controls">
+    Start, stop, and emergency-stop pumps programmatically.
+  </Card>
+  <Card title="Metrics" icon="chart-line" href="/api/metrics">
+    Fetch live sensor readings and historical time-series data.
+  </Card>
+  <Card title="Alerts" icon="bell" href="/api/alerts">
+    List, filter, and acknowledge operational alerts.
+  </Card>
+</CardGroup>

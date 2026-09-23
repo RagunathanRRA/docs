@@ -1,0 +1,93 @@
+---
+title: "Safety Guidelines for Operating Pumps via Samudra"
+sidebarTitle: "Safety Guidelines"
+description: "Important safety information for operators using Samudra to control industrial pump equipment, including Emergency Stop protocols and field operation best practices."
+---
+
+<Warning>
+**Remote control does not replace on-site safety.** Samudra is a software interface for monitoring and commanding pump equipment. It does not have visibility into physical conditions at your site. Always follow your facility's established safety procedures, permit-to-work systems, and local regulations in addition to the guidance on this page.
+</Warning>
+
+## Before You Start a Pump
+
+Before issuing an ON command through Samudra, complete the following pre-start checklist. This is especially important for pumps that have been idle, serviced, or stopped via Emergency Stop.
+
+- [ ] **Confirm no maintenance is in progress.** Verify with site personnel that no one is working on the pump, its pipework, or any connected equipment. Check your facility's lockout/tagout (LOTO) log.
+- [ ] **Ensure all access panels and guards are in place.** Physical safety covers must be secured before remote operation.
+- [ ] **Check that inlet and outlet valves are in the correct position.** Starting a pump against a closed valve can cause water hammer, overpressure, or equipment damage.
+- [ ] **Verify pressure and flow are within safe operating range.** Review the current readings in the Samudra dashboard before issuing the start command. If metrics show `--`, do not start the pump until sensor data is confirmed.
+- [ ] **Confirm safe environmental conditions.** Do not start pumps during electrical storms, flooding events, or other hazardous conditions at the installation site.
+
+---
+
+## Using Emergency Stop Correctly
+
+The **Emergency Stop (E-Stop)** function in Samudra issues an immediate, uncontrolled halt to the pump — bypassing the normal ramp-down sequence.
+
+### When to use Emergency Stop
+
+Use E-Stop only when continued operation presents an **immediate risk** to people, equipment, or the environment. Examples include:
+
+- A person or animal entering a restricted zone near the pump.
+- Sudden abnormal noise, vibration, or visible damage observed via site camera or reported by on-site personnel.
+- A pipe burst, seal failure, or flooding event in the pump room.
+- A fire or electrical fault near the installation.
+
+### What Emergency Stop does
+
+- Commands the pump controller to cut power to the pump motor immediately.
+- Logs a **Critical Event** in the pump's Operational History with a precise timestamp.
+- Locks the ON/OFF toggle until an operator manually re-enables it.
+
+### Before restarting after an Emergency Stop
+
+1. **Physically attend the site** (or confirm via a trusted on-site representative) that the hazard has been resolved.
+2. **Inspect the pump and connected systems** for any damage caused by the abrupt stop.
+3. **Clear the area** of all non-essential personnel.
+4. **Document the event** in your site's incident log before resuming operation.
+5. Only then issue a new **ON** command through the Samudra dashboard.
+
+<Warning>
+Never restart a pump following an Emergency Stop using only remote observation. Physical inspection of the site is required before resuming operation.
+</Warning>
+
+---
+
+## Operating in the Field
+
+Many Samudra operators access the dashboard on mobile devices from outdoor or industrial environments. The following tips support safe and reliable field use:
+
+- **Gloved operation:** The Samudra dashboard is optimised for touch input. Use capacitive-compatible gloves, or briefly remove a glove for critical actions such as Emergency Stop. Avoid using the dashboard with bulky insulating gloves that may cause accidental taps.
+- **Screen readability in sunlight:** Maximise screen brightness when working outdoors. Position your body to shade the screen where possible. High-contrast display modes can help in direct sunlight.
+- **Keep your device charged.** Real-time pump monitoring uses an active WebSocket connection, which drains batteries faster than typical browsing. Carry a portable charger or ensure your device is above 30% battery before beginning a monitoring shift.
+- **Be aware of offline mode.** If your mobile signal drops, the dashboard will display a "Connection Lost" banner. Do not issue control commands until connectivity is fully restored and the live data feed resumes. When in doubt, physically verify pump state at the controller.
+- **Avoid operating while moving.** Do not attempt to control pumps while walking, driving, or working at height. Find a stable, secure position before interacting with the dashboard.
+
+---
+
+## Access Control Best Practices
+
+Proper access management reduces the risk of accidental or unauthorised pump operations.
+
+- **Never share your credentials.** Each operator should have their own individual Samudra account. Shared logins make it impossible to attribute actions in the audit log.
+- **Use the Viewer role for observers.** Site managers, auditors, or safety officers who need to monitor pumps but should not control them must be assigned the **Viewer** role. Viewers can see all data but cannot issue any commands.
+- **Revoke access promptly.** When an operator leaves your organisation or changes roles, an Admin should deactivate their Samudra account immediately via **Settings → Team**.
+- **Rotate API keys regularly.** If you use the Samudra API for integrations or automation, rotate API keys at least every 90 days. Go to **Settings → API Keys** to generate a new key and revoke the old one. Never commit API keys to source code repositories.
+- **Enable multi-factor authentication (MFA).** MFA is available for all Samudra accounts and is strongly recommended for anyone with Operator or Admin privileges. Enable it in **Settings → Account → Security**.
+
+---
+
+## Incident Response
+
+If an unexpected event occurs — such as an unplanned Emergency Stop, an unexplained pump restart, a missed alert, or suspected equipment damage — Samudra provides tools to support your investigation and reporting.
+
+1. **Open the Operational History log immediately.** Navigate to the affected pump and click **Operational History**. This log is timestamped and tamper-evident, recording every command, status change, and alert event.
+2. **Export the relevant time window.** Use the date range picker to select the period of the incident and export the data as CSV or JSON for inclusion in your incident report.
+3. **Review alert delivery receipts.** Under **Settings → Alerts**, check whether the expected notifications were sent and acknowledged. Delivery logs for webhooks are available under **Settings → Webhooks**.
+4. **Contact support if hardware damage is suspected.** If you believe a control action from Samudra contributed to physical equipment damage, contact **support@samudra.io** immediately. Include your organization ID, the pump ID, the timestamp of the incident, and your exported log. Our team can provide additional server-side telemetry to assist your investigation.
+
+---
+
+<Note>
+This document provides software-level guidance for operators using the Samudra dashboard. It does not supersede physical safety requirements applicable to your site. Always consult your pump manufacturer's installation and operation manual, your facility's safety management system, and any applicable local regulations, codes of practice, or industry standards before operating industrial pump equipment.
+</Note>

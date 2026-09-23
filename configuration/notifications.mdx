@@ -1,0 +1,112 @@
+---
+title: "Notification Channels: Email, Webhook, and In-App Alerts"
+sidebarTitle: "Notifications"
+description: "Configure how Samudra delivers pump alerts to your team — via in-dashboard banners, email, or outbound webhooks to external systems."
+---
+
+## Notification Channels Overview
+
+When a pump metric crosses a configured [alert threshold](/configuration/thresholds), Samudra can notify your team through three channels:
+
+| Channel | Always On? | Setup Required |
+|---|---|---|
+| **In-dashboard banner** | ✅ Yes | None — active for all users automatically |
+| **Email** | No | Add recipient addresses in Organization Settings |
+| **Webhook** | No | Register a URL endpoint in Organization Settings |
+
+---
+
+## In-Dashboard Banners
+
+Alert banners appear at the top of the Samudra dashboard in real time. They are color-coded by severity (blue for Info, amber for Warning, red for Critical) and include the pump name, metric, and current value. Banners cannot be turned off, but individual users can [control which severities](#per-user-preferences) generate personal notifications.
+
+---
+
+## Email Alerts
+
+### Adding a Recipient
+
+1. Go to **Organization Settings → Notifications → Email Recipients**.
+2. Click **Add Email** and enter the recipient's address.
+3. Select the minimum severity level that should trigger an email for this recipient.
+4. Click **Save**.
+
+Recipients do not need to be Samudra users — you can add distribution lists, on-call pager addresses, or any external inbox.
+
+### Email Format
+
+Each alert email follows a consistent format:
+
+- **Subject:** `[Samudra] {Severity} – {Pump Name}: {Metric} threshold breached`
+  *Example: `[Samudra] Warning – Main Intake Pump 1: pressure threshold breached`*
+- **Body** includes:
+  - The metric that was breached and its current value
+  - The threshold that was crossed
+  - The date and time the alert was triggered (ISO 8601, UTC)
+  - A direct link to the pump's detail page in the dashboard
+
+---
+
+## Webhooks
+
+Webhooks let you forward alerts to external systems — such as PagerDuty, Slack, a CMMS, or a custom alerting pipeline.
+
+### Adding a Webhook
+
+1. Go to **Organization Settings → Notifications → Webhooks**.
+2. Click **Add Webhook URL**.
+3. Enter the destination URL, an optional description, and the minimum severity level to forward.
+4. (Recommended) Enter a **Shared Secret** to enable payload signing — see [Webhook Security](#webhook-security) below.
+5. Click **Save and Test** to send a sample payload and confirm delivery.
+
+### Webhook Payload
+
+Samudra sends an HTTP `POST` request with a JSON body to your endpoint within seconds of an alert being triggered:
+
+```json
+{
+  "event": "alert.triggered",
+  "pump_id": "pump_abc123",
+  "pump_name": "Main Intake Pump 1",
+  "metric": "pressure",
+  "value": 8.4,
+  "unit": "bar",
+  "threshold": 8.0,
+  "severity": "warning",
+  "triggered_at": "2024-03-15T14:32:00Z"
+}
+```
+
+Your endpoint must return an HTTP `2xx` status code within 10 seconds. Failed deliveries are retried up to **three times** with exponential back-off (5 s, 25 s, 125 s). Delivery attempts and response codes are visible under **Webhook Logs** on the same page.
+
+### Webhook Security
+
+To verify that incoming requests originate from Samudra, provide a shared secret when creating the webhook. Samudra will include an `X-Samudra-Signature` header on every request — a hex-encoded **HMAC-SHA256** signature of the raw request body, computed using your shared secret as the key.
+
+Validate it on your server by recomputing the signature and comparing it to the header value. Reject any request where the signatures do not match.
+
+---
+
+## Maintenance Windows (Notification Silencing) {#maintenance-windows}
+
+To prevent alert noise during planned maintenance, you can create a **Maintenance Window**:
+
+1. Go to **Organization Settings → Notifications → Maintenance Windows**.
+2. Click **New Window**, set the start time, end time, and select which pumps to silence.
+3. Click **Save**.
+
+During the window, alerts are still logged to each pump's Alert History and will appear in the dashboard, but no emails or webhook calls are sent. Windows can also be started immediately using the **Silence Now** button on any pump's detail page.
+
+---
+
+## Per-User Notification Preferences {#per-user-preferences}
+
+Each team member can control their personal notification experience without affecting organization-wide settings:
+
+1. Click the user avatar in the top-right corner and select **Notification Preferences**.
+2. Toggle email notifications on or off per severity level (Info, Warning, Critical).
+3. Choose whether in-dashboard banners auto-dismiss or stay pinned until acknowledged.
+
+<Note>
+Organization admins can set a minimum severity floor — for example, requiring that all users always receive Critical alerts via email regardless of personal preferences.
+</Note>

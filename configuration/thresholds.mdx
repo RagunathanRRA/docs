@@ -1,0 +1,71 @@
+---
+title: "Alert Thresholds: Set Safe Operating Limits per Pump"
+sidebarTitle: "Thresholds"
+description: "Define upper and lower operating limits for flow rate, pressure, and temperature on each Samudra pump to trigger alerts before conditions become critical."
+---
+
+## What Are Thresholds?
+
+Thresholds are numeric limits you define for specific metrics on each pump. When a sensor reading crosses a threshold, Samudra generates an alert and routes it through your configured [notification channels](/configuration/notifications). Thresholds give you early warning of abnormal operating conditions — before they escalate into equipment failures or safety incidents.
+
+---
+
+## Where to Configure Thresholds
+
+1. Open the pump's **Settings** panel (gear icon on the Equipment Status card, or **Dashboard → Pumps → *select pump* → Settings**).
+2. Click the **Thresholds** tab.
+3. Set values for the metrics relevant to your installation, assign a severity level, and click **Save Thresholds**.
+
+---
+
+## Available Thresholds
+
+| Metric | Direction | Unit (Metric / Imperial) | Default | Recommended Starting Point |
+|---|---|---|---|---|
+| **Pressure** | Maximum | bar / psi | *(disabled)* | 10% below the pump's rated maximum pressure |
+| **Pressure** | Minimum | bar / psi | *(disabled)* | 20% above zero — catches loss of prime |
+| **Temperature** | Maximum | °C / °F | *(disabled)* | 5 °C below the motor's thermal rating |
+| **Flow Rate** | Minimum | m³/h / GPM | *(disabled)* | 10% of nominal flow — detects blockages or cavitation |
+| **Runtime Without Stop** | Maximum | minutes | *(disabled)* | Per manufacturer duty-cycle guidance |
+
+All thresholds are disabled by default. Enable each one individually by entering a numeric value and selecting a severity.
+
+---
+
+## Severity Levels
+
+Each threshold is assigned one of three severity levels:
+
+| Severity | Color | Meaning |
+|---|---|---|
+| **Info** | Blue | Operating outside normal range but not yet a concern. No immediate action required. |
+| **Warning** | Amber | Conditions are approaching unsafe levels. Investigate soon. |
+| **Critical** | Red | Immediate action required to prevent damage or downtime. |
+
+Severity affects how alerts are displayed in the dashboard and which notification channels are triggered, depending on your team's [per-user notification preferences](/configuration/notifications#per-user-preferences).
+
+---
+
+## How Thresholds Trigger Alerts
+
+Samudra evaluates every incoming sensor reading against configured thresholds as data arrives (subject to the pump's poll interval). When a value crosses a threshold:
+
+1. An alert event is created and logged to the pump's **Alert History**.
+2. An in-dashboard banner is displayed immediately.
+3. Any email recipients and webhooks configured for that severity level are notified.
+
+Alerts automatically resolve — and a resolution event is logged — when the metric returns within the configured limit for three consecutive readings. This prevents flapping on sensors with minor oscillations.
+
+---
+
+## Tips for Effective Threshold Configuration
+
+<Tip>
+**Set Warning before Critical.** Configure a Warning threshold a comfortable margin before the Critical threshold. For example, if your Critical pressure limit is 10 bar, set Warning at 8.5 bar. This gives operators time to investigate and respond before an emergency condition is reached.
+</Tip>
+
+<Note>
+**Thresholds are per-pump, not global.** Each pump maintains its own independent set of thresholds. A pressure rating appropriate for a high-pressure injection pump may be dangerous to apply to a lower-rated transfer pump on the same site. Always configure thresholds based on the individual pump's specifications and site requirements.
+</Note>
+
+To copy an existing pump's threshold configuration to another pump, use the **Copy Thresholds** option at the bottom of the Thresholds tab.

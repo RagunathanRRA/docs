@@ -1,0 +1,67 @@
+---
+title: "Real-Time Pump Metrics: Flow, Pressure, and Temperature"
+sidebarTitle: "Live Metrics"
+description: "Samudra streams live flow rate, pressure, temperature, and runtime data from your pumps. Learn how to read and interpret each metric on the dashboard."
+---
+
+## Overview
+
+Samudra continuously streams live operational data from every connected pump, giving operators an immediate, accurate picture of field conditions without manual polling. The following metrics are tracked for each pump in real time:
+
+- **Flow Rate** — the volume of fluid moving through the pump, measured in liters per minute (L/min) or gallons per minute (GPM)
+- **Pressure** — the outlet pressure of the pump, measured in bar or PSI
+- **Temperature** — the fluid or casing temperature at the pump, measured in degrees Celsius (°C) or Fahrenheit (°F)
+- **Runtime** — the cumulative time the pump has been running in the current session, displayed as hours:minutes (e.g., `04:32`)
+
+## Where to Find Live Metrics
+
+Live readings appear in two places on the Samudra dashboard:
+
+1. **Equipment Status Card** — the compact card visible on your pump list shows current flow rate, pressure, and temperature at a glance. Cards update in place so you can monitor multiple pumps simultaneously without leaving the overview screen.
+2. **Expanded Metrics Panel** — click any pump card to open the full detail view. The expanded panel shows all four metrics in larger format, along with color-coded status indicators that turn amber on warning and red on critical thresholds.
+
+## Update Frequency
+
+All metrics refresh **every second**. The timestamp in the top-right corner of each metric tile shows the exact time of the last successful reading. If the timestamp stops advancing, the pump may have lost its connection to Samudra — see [Connection Troubleshooting](/help/troubleshooting) for guidance.
+
+## Switching Between Metric and Imperial Units
+
+By default, Samudra displays metric units (L/min, bar, °C). To switch to imperial units (GPM, PSI, °F):
+
+1. Click your avatar in the top-right corner and select **Settings**.
+2. Open the **Units & Display** tab.
+3. Under **Measurement System**, select **Imperial**.
+4. Click **Save**. The change applies immediately across all dashboards for your account.
+
+Unit preferences are stored per user, so each operator can choose their preferred system independently.
+
+## Understanding a "--" Reading
+
+If a metric tile displays `--` instead of a numeric value, Samudra is not receiving data for that sensor. Common causes include:
+
+- **Network interruption** between the pump controller and the Samudra gateway
+- **Sensor fault** — the physical sensor may be disconnected or damaged
+- **Pump offline** — the pump itself is powered down and not transmitting
+
+Check the pump's connection status indicator (shown as a colored dot on the Equipment Status card). If the pump shows as **Online** but a metric still reads `--`, the individual sensor may have faulted and should be inspected on-site.
+
+## 24-Hour Trend Charts
+
+Clicking any metric tile in the expanded panel opens a **24-hour trend chart** for that metric. The chart plots one data point per minute and displays:
+
+- Min, max, and average values for the period
+- Shaded bands marking your configured warning and critical thresholds
+- Annotations for any alerts that fired during the window
+
+Use trend charts to spot gradual drift — for example, slowly rising temperature over several hours — before a threshold breach occurs.
+
+## Metric Reference Table
+
+| Metric | Unit (Metric / Imperial) | Typical Normal Range | Out-of-Range Indication |
+|---|---|---|---|
+| Flow Rate | L/min / GPM | 200–800 L/min | Blockage, cavitation, or valve issue |
+| Pressure | bar / PSI | 2.5–6.0 bar | Over-pressure risk or suction loss |
+| Temperature | °C / °F | 20–65 °C | Overheating or cooling system fault |
+| Runtime | hrs:min | — | Excessive continuous runtime may indicate a stuck control signal |
+
+Normal ranges vary by pump model, fluid type, and installation. Use the values above as a starting point and adjust your thresholds to reflect the actual observed operating envelope of each pump in your facility.

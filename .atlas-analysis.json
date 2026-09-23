@@ -1,13 +1,11 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
+  "projectType": "saas",
+  "projectName": "Samudra",
+  "projectDescription": "Samudra is an industrial pump monitoring and control dashboard that lets operators manage equipment status, trigger emergency stops, and track real-time operational metrics from any device.",
   "theme": "almond",
-  "name": "Samudra",
-  "colors": {
-    "primary": "#ef7025",
-    "light": "#eec9bc",
-    "dark": "#4fa1ab"
-  },
-  "favicon": "/favicon.svg",
+  "primaryColor": "#ef7025",
+  "lightColor": "#eec9bc",
+  "darkColor": "#4fa1ab",
   "navigation": {
     "tabs": [
       {
@@ -79,14 +77,22 @@
       }
     ]
   },
-  "navbar": {
-    "primary": {
-      "type": "button",
-      "label": "Open Dashboard",
-      "href": "https://app.samudra.io"
-    }
-  },
-  "footer": {
-    "socials": {}
-  }
+  "keyFeatures": [
+    "Real-time pump ON/OFF control with large tactile pill switch",
+    "Emergency stop action with immediate hardware response",
+    "Equipment status hero card with live operational state",
+    "Outdoor-optimized UI with high contrast and gloved-thumb accessibility",
+    "Real-time metrics monitoring and threshold alerting",
+    "Operational history and audit logging",
+    "Multi-pump management from a single dashboard",
+    "Configurable alert thresholds and notification channels"
+  ],
+  "publicApiSurface": [
+    "GET /api/pumps — list all pumps and their current status",
+    "POST /api/pumps/{id}/control — send ON/OFF command to a pump",
+    "POST /api/pumps/{id}/emergency-stop — trigger emergency stop",
+    "GET /api/pumps/{id}/metrics — retrieve real-time metrics",
+    "GET /api/alerts — list active alerts",
+    "PUT /api/configuration/thresholds — update operational thresholds"
+  ]
 }
