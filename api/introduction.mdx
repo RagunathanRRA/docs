@@ -1,8 +1,10 @@
 ---
-title: "Samudra REST API: Overview and Getting Started"
+title: "Samudra REST API: Full Reference and Getting Started"
 sidebarTitle: "API Overview"
-description: "The Samudra REST API lets you control pumps, retrieve live metrics, and manage alerts programmatically. All requests use HTTPS and Bearer token authentication."
+description: "The Samudra REST API lets you control pumps, retrieve live metrics, and manage alerts programmatically using HTTPS and Bearer token authentication."
 ---
+
+The Samudra REST API gives you full programmatic access to your pump infrastructure — start and stop pumps, fetch live sensor data, manage operational alerts, and configure threshold rules, all from your own systems or workflows.
 
 ## Base URL
 
@@ -96,3 +98,13 @@ When a request fails, the API returns a structured JSON error body alongside the
     List, filter, and acknowledge operational alerts.
   </Card>
 </CardGroup>
+
+## Configuration Endpoints
+
+In addition to the pump and alerting APIs listed above, Samudra exposes a configuration endpoint for managing operational thresholds:
+
+| Method | Path | Description |
+|---|---|---|
+| `PUT` | `/api/configuration/thresholds` | Update alert thresholds for flow rate, pressure, temperature, and runtime. |
+
+Full parameter details and example requests are available on the [Configuration: Thresholds](/configuration/thresholds) page.

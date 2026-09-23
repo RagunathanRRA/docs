@@ -69,3 +69,31 @@ Alerts automatically resolve — and a resolution event is logged — when the m
 </Note>
 
 To copy an existing pump's threshold configuration to another pump, use the **Copy Thresholds** option at the bottom of the Thresholds tab.
+
+---
+
+## Managing Thresholds via the API
+
+In addition to the dashboard UI, you can read and update threshold configurations programmatically using the Samudra REST API. This is useful for scripted deployments, fleet-wide configuration changes, or integrating Samudra thresholds with your own tooling.
+
+**Update thresholds for a pump:**
+
+```http
+PUT /api/configuration/thresholds
+Authorization: Bearer <your_api_token>
+Content-Type: application/json
+
+{
+  "pump_id": "pump_abc123",
+  "thresholds": [
+    { "metric": "pressure", "direction": "max", "value": 10.0, "unit": "bar", "severity": "critical" },
+    { "metric": "pressure", "direction": "max", "value": 8.5,  "unit": "bar", "severity": "warning" },
+    { "metric": "temperature", "direction": "max", "value": 80.0, "unit": "celsius", "severity": "warning" },
+    { "metric": "flow_rate", "direction": "min", "value": 5.0, "unit": "m3h", "severity": "warning" }
+  ]
+}
+```
+
+A successful request returns `200 OK` with the saved threshold configuration. The new limits take effect immediately — the next incoming sensor reading will be evaluated against them.
+
+For full request and response schemas, authentication details, and error codes, see the [API reference](/api/introduction).
